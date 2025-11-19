@@ -5,7 +5,7 @@ This is the template file for the part 4 of the Prelim 1.
 Ceci est le fichier template pour la partie 4 du Prelim 1.
 """
 
-def part_4(positions: [(int, int, int)]):
+def part_4(positions):
     """
     Find the closest preys to the platypus
 
@@ -18,7 +18,16 @@ def part_4(positions: [(int, int, int)]):
     order = []
     ### You code goes here ###
     ### Votre code va ici ###
+    platypus = positions[0]
+    distance = lambda x,y,z: math.sqrt((platypus[0]-x)**2 + (platypus[1]-y)**2 + (platypus[2]-z)**2)
+    preys_distance = []
+    
+    for prey, coordinates in enumerate(positions[1:]):
+        preys_distance.append((prey + 1, distance(coordinates[0],coordinates[1],coordinates[2])))
+    
+    preys_distance.sort(key = lambda x: x[1])
 
-
+    order = [i for i,_ in preys_distance]
+    
 
     return order

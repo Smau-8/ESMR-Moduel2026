@@ -22,6 +22,11 @@ def part_2(w: int, h: int, l: int, a: int):
     ### You code goes here ###
     ### Votre code va ici ###
 
+    V = ((math.pi * 4/3) * (w/2) * (l/2) * (h/2))
 
+    if a > 10:
+        a=10
+    
+    milk = round(V/2 * 10*a/100, 2)
 
     return milk

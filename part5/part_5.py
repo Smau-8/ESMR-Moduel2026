@@ -5,6 +5,7 @@ This is the template file for the part 5 of the Prelim 1.
 Ceci est le fichier template pour la partie 5 du Prelim 1.
 """
 
+import math
 def part_5(turns: int, board: [str]):
     """
     Simulate the Game of platypus
@@ -16,64 +17,75 @@ def part_5(turns: int, board: [str]):
     Returns:
         str: Is the platypus surviving ("Yes" or "No")
     """
-
     final_answer = "No"
     ### You code goes here ###
     ### Votre code va ici ###
 
-    board = [list(row) for row in board]
-    foods = []
+    final_answer = "Yes"
     hunger = 0
-    nb_turn = 0
-    
-    while hunger < 3 and nb_turn < turns:
-        for y,row in enumerate(board):
+    foods = []
+    board = [list(row) for row in board]
+    pl_moved = False
+    distance = lambda x,y,xy: math.sqrt((xy[0]-x)**2 + (xy[1]-y)**2)
+    for turn in range(turns):
+        hunger += 1
+        pl_moved = False
+        foods = []
+
+        for y, row in enumerate(board):
             for x,el in enumerate(row):
-                if el == "x":
-                    if board[y][x+1] == ".":
-                        hunger = 0
-                        board[y][x+1] = "x"
-                        board[y][x] = "_"
+                if el == "x" and pl_moved == False:
+                    platypus = (x,y)
+                    if x+1 < len(board[1]) and board[y][x+1] == ".":
+                        board[y][x], board[y][x +1] = "_","x"
+                        hunger,pl_moved = 0, True
                         continue
-                    if board[y+1][x] == ".":
-                        hunger = 0
-                        board[y+1][x] = "x"
-                        board[y][x] = "_"
+                    if y+1 < len(board) and board[y+1][x] == ".":
+                        board[y][x],board[y+1][x] = "_","x"
+                        hunger,pl_moved = 0, True
                         continue
-                    if board[y][x-1] == ".":
-                        hunger = 0
-                        board[y][x-1] = "x"
-                        board[y][x] = "_"
+                    if x-1 >= 0 and board[y][x-1] == ".":
+                        board[y][x],board[y][x-1] = "_","x"
+                        hunger,pl_moved = 0, True
                         continue
-                    if board[y][x-1] == ".":
-                        hunger = 0
-                        board[y-1][x] = "x"
-                        board[y][x] = "_"
+                    if y-1 >= 0 and board[y-1][x] == ".":
+                        board[y][x],board[y-1][x] = "_","x"
+                        hunger,pl_moved = 0, True
                         continue
                 if el == ".":
                     foods.append((x,y))
-                
 
+        if pl_moved == False and foods:
+            closest = [(float('inf'),(0,0))]
+            for food in foods:
+                food_distance = (distance(platypus[0],platypus[1],food), (food[0], food[1]))
+                if food_distance[0] < closest[0][0]: 
+                    closest = [food_distance]
+                if food_distance[0] == closest[0][0]:
+                    closest.append(food_distance)
 
-    print(board)
+            directions = []
+            for food in closest:
+                if food[1][0] - platypus[0] > 0:
+                    directions.append("right")
+                elif food[1][0] - platypus[0] < 0:
+                    directions.append("left")
+                elif food[1][1] - platypus[1] > 0:
+                    directions.append("down")
+                elif food[1][1] - platypus[1] < 0:
+                    directions.append("up")
+
+            if "right" in directions:
+                board[platypus[1]][platypus[0]], board[platypus[1]][platypus[0] +1] = "_","x"
+            elif "down" in directions:
+                board[platypus[1]][platypus[0]], board[platypus[1] +1][platypus[0]] = "_","x"
+            elif "left" in directions:
+                board[platypus[1]][platypus[0]], board[platypus[1]][platypus[0] -1] = "_","x"
+            elif "up" in directions:
+                board[platypus[1]][platypus[0]], board[platypus[1] -1][platypus[0]] = "_","x"
+
+        if hunger >= 3:
+            return "No"
+
+    
     return final_answer
-
-print(part_5( turns = 11, 
-        board = [
-            "____x.________._",
-            "_______.________",
-            "_________..___._",
-            "_.__._____.____.",
-            "_________.__.___",
-            ".____________._.",
-            "_.__________.___",
-            "__.______..__.__",
-            "____._______.___",
-            ".__.___.________",
-            "______._________",
-            "____..._____.___",
-            "__..___.._______",
-            "_______________.",
-            "________._._____",
-            "____.._______.__",
-        ]))
