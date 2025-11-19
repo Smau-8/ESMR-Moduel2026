@@ -17,8 +17,15 @@ def part_5(turns: int, board: [str]):
         str: Is the platypus surviving ("Yes" or "No")
     """
 
+    final_answer = "No"
+    ### You code goes here ###
+    ### Votre code va ici ###
+
+    board = [list(row) for row in board]
+    foods = []
     hunger = 0
     nb_turn = 0
+    
     while hunger < 3 and nb_turn < turns:
         for y,row in enumerate(board):
             for x,el in enumerate(row):
@@ -44,18 +51,29 @@ def part_5(turns: int, board: [str]):
                         board[y][x] = "_"
                         continue
                 if el == ".":
-                    
-
-                    
-
-                        
+                    foods.append((x,y))
+                
 
 
-    final_answer = "No"
-    ### You code goes here ###
-    ### Votre code va ici ###
-
-
-
-
+    print(board)
     return final_answer
+
+print(part_5( turns = 11, 
+        board = [
+            "____x.________._",
+            "_______.________",
+            "_________..___._",
+            "_.__._____.____.",
+            "_________.__.___",
+            ".____________._.",
+            "_.__________.___",
+            "__.______..__.__",
+            "____._______.___",
+            ".__.___.________",
+            "______._________",
+            "____..._____.___",
+            "__..___.._______",
+            "_______________.",
+            "________._._____",
+            "____.._______.__",
+        ]))

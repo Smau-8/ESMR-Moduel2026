@@ -23,6 +23,10 @@ def part_1(size: int):
     tail = []
     ### YOUR CODE GOES HERE ###
 
-
+    for nb_row in range(size + 1):
+        tail.append("|" + "_." * (2 *size - 1) + "_|")
+    
+    for nb_row in range(1, size + 1):
+        tail.append(" " *nb_row + "\\" + "_." * (2 *size -1 -nb_row) + "_/" + " " *nb_row)
 
     return tail
